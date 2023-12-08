@@ -11,5 +11,10 @@ router.post(
 );
 
 router.get("/", checkTokenMiddleware, appartementController.getAllAppartements);
+router.put(
+    "/update/:id",
+    [checkTokenMiddleware, validateAppartementMiddleware],
+    appartementController.updateAppartement
+);
 
 module.exports = router;
