@@ -1,5 +1,6 @@
 const authRoute = require("./routes/authRoutes");
 const appartementRoute = require("./routes/appartementRoutes");
+const paymentRoute = require("./routes/paymentRoutes");
 
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -32,6 +33,7 @@ mongoose
 // Middleware of ROUTES
 app.use("/api/auth", authRoute);
 app.use("/api/appartement", appartementRoute);
+app.use("/api/payment", paymentRoute);
 
 const port = 3000;
 app.listen(port, () => {
