@@ -13,7 +13,22 @@ const getAllAppartements = async (req, res) => {
     const appartement = await AppartementModel.find({});
     return res.json({ status: true, data: appartement });
 };
-const getAppartementById = async (req, res) => {};
+const getAppartementById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const appartement = await AppartementModel.findById(id);
+        if (!appartement) {
+            return res.status(404).json({ error: "Appartement not found" });
+        }
+        res.json({
+            success: "Appartement found successfully",
+            data: appartement,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ error: "Something went wrong" });
+    }
+};
 const updateAppartement = async (req, res) => {
     try {
         const { id } = req.params;
@@ -34,7 +49,22 @@ const updateAppartement = async (req, res) => {
         res.status(400).json({ error: "Something went wrong" });
     }
 };
-const deleteAppartement = async (req, res) => {};
+const deleteAppartement = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedAppartement = await AppartementModel.findByIdAndDelete(id);
+        if (!deletedAppartement) {
+            return res.status(404).json({ error: "Appartement not found" });
+        }
+        res.json({
+            success: "Appartement deleted successfully",
+            deletedAppartement,
+        });
+    } catch (e) {
+        console.log(e);
+        res.status(400).json({ error: "Something went wrong" });
+    }
+};
 
 module.exports = {
     createAppartement,
