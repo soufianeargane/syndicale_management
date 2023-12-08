@@ -10,4 +10,6 @@ router.post(
     appartementController.createAppartement
 );
 
+router.get("/", checkTokenMiddleware, appartementController.getAllAppartements);
+
 module.exports = router;
