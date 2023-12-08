@@ -29,30 +29,23 @@ const getPaymentsByMonth = async (req, res) => {
         const month = today.getMonth() + 1; // Months are zero-based
         const year = today.getFullYear();
 
-        // Apartments that have paid this month
-        const paidApartments = (
-            await PaymentModel.find({
-                month,
-                year,
-            }).distinct("apartment")
-        ).map(String);
+        // Fetch all apartments
+        const allApartments = await AppartementModel.find();
 
-        console.log(paidApartments);
+        // Fetch paid apartments for the current month
+        const paidApartments = await PaymentModel.find({
+            month,
+            year,
+            apartment: { $in: allApartments.map((apartment) => apartment._id) },
+        }).populate("apartment");
 
-        // All apartments
-        const allApartments = (
-            await AppartementModel.find().distinct("_id")
-        ).map(String);
-        console.log("hhhhhh");
-
-        console.log(allApartments);
-
-        // Apartments that haven't paid this month
-        const unpaidApartments = allApartments.filter((apartment) => {
-            return !paidApartments.includes(String(apartment));
-        });
-        console.log("unpaidApartments");
-        console.log(unpaidApartments);
+        // Separate paid and unpaid apartments
+        const paidApartmentsIds = paidApartments.map((payment) =>
+            String(payment.apartment._id)
+        );
+        const unpaidApartments = allApartments.filter(
+            (apartment) => !paidApartmentsIds.includes(String(apartment._id))
+        );
 
         res.json({
             paidApartments,
