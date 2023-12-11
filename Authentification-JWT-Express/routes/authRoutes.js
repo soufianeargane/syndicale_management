@@ -1,6 +1,7 @@
 const authController = require("../controllers/authController");
 const express = require("express");
 const router = express.Router();
+const checkTokenMiddleware = require("../middlewares/tokenMiddleware");
 
 router.post("/login", authController.login);
 /**
@@ -48,4 +49,6 @@ router.post("/logout", authController.logout);
  *       200:
  *         description: User logged out successfully
  */
+
+router.get("/checkauth", checkTokenMiddleware, authController.checkAuth);
 module.exports = router;

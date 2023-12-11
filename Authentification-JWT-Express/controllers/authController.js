@@ -177,12 +177,11 @@ async function resetPassword(req, res) {
 }
 
 function checkAuth(req, res) {
-    let user = req.user;
+    let user = req.user.returnUser;
     let returnUser = {
-        _id: user.user._id,
-        name: user.user.name,
-        email: user.user.email,
-        role: user.user.role.name,
+        _id: user._id,
+        name: user.name,
+        email: user.email,
     };
     res.json({ success: "user is Already logged in hhhh", user: returnUser });
 }
